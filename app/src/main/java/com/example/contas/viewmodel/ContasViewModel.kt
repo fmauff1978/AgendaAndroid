@@ -38,7 +38,7 @@ class ContasViewModel: ViewModel(){
             _isLoading.value = true
             _error.value = null
             try {
-                val snapshot = db.collection(COLECAO_CONTAS).get().await()
+                val snapshot = db.collection("contas2025").get().await()
                 _contas.value = snapshot.documents.mapNotNull { document ->
                     // Mapeia o documento para o seu objeto Conta
                     // Adicione .toObject(Conta::class.java) se você tiver os campos correspondentes
