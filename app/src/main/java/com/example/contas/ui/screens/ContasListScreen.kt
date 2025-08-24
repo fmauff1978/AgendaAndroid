@@ -34,42 +34,108 @@ fun ContasListScreen(
         topBar = {
             TopAppBar(title = { Text("Minhas Contas 2025") })
         }
+//    ) { paddingValues ->
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(paddingValues)
+//                .padding(16.dp),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            when {
+//                isLoading -> {
+//                    CircularProgressIndicator()
+//                }
+//                error != null -> {
+//                    Text(
+//                        text = "Erro: $error",
+//                        color = MaterialTheme.colorScheme.error,
+//                        style = MaterialTheme.typography.bodyMedium
+//                    )
+//                }
+//                contas.isEmpty() -> {
+//                    Text("Nenhuma conta encontrada.")
+//                }
+//
+//                else -> {
+//                    ContasList(contas = contas)
+//                }
+//            }
+//        }
+//    }
+//}
+
     ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            when {
-                isLoading -> {
+        // O "when" agora é o elemento principal dentro do Scaffold.
+        // A lógica de layout muda dependendo do estado.
+        when {
+            isLoading -> {
+                // ESTE CASO USA O BOX PARA CENTRALIZAR
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
                     CircularProgressIndicator()
                 }
-                error != null -> {
+            }
+            error != null -> {
+                // ESTE CASO TAMBÉM USA O BOX PARA CENTRALIZAR
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
                         text = "Erro: $error",
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
-                contas.isEmpty() -> {
+            }
+            contas.isEmpty() -> {
+                // E ESTE CASO TAMBÉM
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
                     Text("Nenhuma conta encontrada.")
                 }
-
-                else -> {
-                    ContasList(contas = contas)
-                }
+            }
+            else -> {
+                // IMPORTANTE: A LISTA NÃO USA O BOX CENTRALIZADOR
+                // Ela é colocada diretamente, recebendo restrições finitas do Scaffold.
+                ContasList(
+                    contas = contas,
+                    modifier = Modifier.padding(paddingValues) // Passa o padding do Scaffold para a lista
+                )
             }
         }
     }
 }
 
+
+//@Composable
+//fun ContasList(contas: List<Conta>) {
+//    androidx.compose.foundation.lazy.LazyColumn(
+//        modifier = androidx.compose.ui.Modifier.fillMaxSize(),
+//        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+//    ) {
+//        items(contas) { conta ->
+//            ContaItem(conta = conta)
+//        }
+//    }
+//}
 @Composable
-fun ContasList(contas: List<Conta>) {
-    androidx.compose.foundation.lazy.LazyColumn(
-        modifier = androidx.compose.ui.Modifier.fillMaxSize(),
-        verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
+fun ContasList(contas: List<Conta>, modifier: Modifier = Modifier) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(), // Aplica o modifier recebido
+        contentPadding = PaddingValues(16.dp), // Usa contentPadding para espaçamento interno
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(contas) { conta ->
             ContaItem(conta = conta)

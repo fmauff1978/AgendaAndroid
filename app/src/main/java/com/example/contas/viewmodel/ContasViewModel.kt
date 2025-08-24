@@ -46,7 +46,7 @@ class ContasViewModel: ViewModel(){
                     // Certifique-se que sua classe Conta tem um construtor vazio se usar toObject.
                     Conta(
                         id = document.id,
-                       // cod = document.getInt("cod") ?: 0,
+                     //  cod = document.getInt("cod") ?: 0,
                         conta = document.getString("conta") ?: "",
                         saldo = document.getDouble("saldo") ?: 0.0,
 
