@@ -12,5 +12,6 @@ data class Conta( // Define the primary constructor here
    //  val mod_despesa: String = "",
    //  val natureza: String = "",
      val saldo: Double = 0.0) {
+
      // You can leave this empty if you don't have any additional logic
 }
