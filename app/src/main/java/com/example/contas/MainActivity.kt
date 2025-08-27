@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.contas.ui.theme.ContasTheme
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
-import com.example.contas.ui.screens.ContasListScreen
+import com.example.contas.ui.screens.AgendaListScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,13 +29,13 @@ class MainActivity : ComponentActivity() {
                     modifier = androidx.compose.ui.Modifier.fillMaxSize(),
                     color = androidx.compose.material3.MaterialTheme.colorScheme.background
                 ) {
-                    ContasListScreen() // Chame sua tela aqui
+                    AgendaListScreen() // Chame sua tela aqui
                 }
                 }
             }
             val db = Firebase.firestore
 
-            db.collection("contas2025")
+            db.collection("agenda")
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
