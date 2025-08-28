@@ -1,16 +1,21 @@
 package com.example.agenda.viewmodel
 
 import android.util.Log
+import androidx.activity.result.launch
+import androidx.compose.foundation.layout.add
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.agenda.model.Agenda
 import com.google.firebase.Firebase
-import com.google.firebase.Timestamp
+
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.util.Calendar
+import com.google.firebase.Timestamp
 
 
 class AgendaViewModel: ViewModel(){
@@ -71,4 +76,34 @@ class AgendaViewModel: ViewModel(){
 
 
 
-}}
+}
+
+    fun reagendarParaProximoMesBaseadoNoAgendamento(itemAgenda: Agenda) {
+        viewModelScope.launch {
+            _isLoading.value = true // Opcional: feedback de carregamento
+            try {
+                val calendario = Calendar.getInstance()
+                // Define o calendário com a data de 'agendado_para' do item específico
+                calendario.time = itemAgenda.agendado_para.toDate()
+                calendario.add(Calendar.MONTH, 1) // Adiciona
+                val novaData = com.google.firebase.Timestamp(calendario.time)
+                val db = FirebaseFirestore.getInstance()
+                val docRef = db.collection("agenda").document(itemAgenda.id)
+
+                docRef.update("agendado_para", novaData)
+                    .addOnSuccessListener {
+                        Log.d("ViewModel", "Agenda ${itemAgenda.id} reagendada com sucesso para $novaData.")
+                        fetchContas() // Rebusca os dados para atualizar a UI
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("ViewModel", "Erro ao reagendar agenda ${itemAgenda.id}", e)
+                        _error.value = "Erro ao reagendar: ${e.message}"
+                    }
+            } catch (e: Exception) {
+                Log.e("ViewModel", "Exceção ao reagendar", e)
+                _error.value = "Exceção ao reagendar: ${e.message}"
+            } finally {
+                // _isLoading.value = false // fetchAgenda() deve cuidar disso se for o caso
+            }
+        }
+    }}

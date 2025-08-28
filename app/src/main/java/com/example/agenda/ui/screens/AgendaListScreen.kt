@@ -102,7 +102,8 @@ fun AgendaListScreen(
                 // Ela é colocada diretamente, recebendo restrições finitas do Scaffold.
                 AgendaList(
                     agenda = agenda,
-                    modifier = Modifier.padding(paddingValues) // Passa o padding do Scaffold para a lista
+                    modifier = Modifier.padding(paddingValues),
+                    viewModel = viewModel // Passa o padding do Scaffold para a lista
                 )
             }
         }
@@ -111,21 +112,23 @@ fun AgendaListScreen(
 
 
 @Composable
-fun AgendaList(agenda: List<Agenda>, modifier: Modifier = Modifier) {
+fun AgendaList(agenda: List<Agenda>, modifier: Modifier = Modifier, viewModel: AgendaViewModel) {
     LazyColumn(
         modifier = modifier.fillMaxSize(), // Aplica o modifier recebido
         contentPadding = PaddingValues(16.dp), // Usa contentPadding para espaçamento interno
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(agenda) { agenda ->
-            AgendaItem(agenda = agenda)
+            AgendaItem(agenda = agenda, onReagendarClick = {itemClicado ->
+                viewModel.reagendarParaProximoMesBaseadoNoAgendamento(itemClicado)
+            })
         }
     }
 }
 
 
 @Composable
-fun AgendaItem(agenda: Agenda) {
+fun AgendaItem(agenda: Agenda, onReagendarClick: (item:Agenda)-> Unit) {
 
     val formatoData = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR"))
     val dataAgendada = agenda.agendado_para.toDate()
@@ -162,18 +165,7 @@ fun AgendaItem(agenda: Agenda) {
 
                 // Ícone de "tick" para reagendar para o mês seguinte
                 IconButton(onClick = {
-                    val calendario = Calendar.getInstance()
-                    calendario.time = agenda.agendado_para.toDate()
-
-                    calendario.add(Calendar.MONTH, 1) // Adiciona 1 mês
-                    val novaData = Timestamp(calendario.time)
-
-                    val db = FirebaseFirestore.getInstance()
-                    val docRef =
-                        db.collection("agenda").document(agenda.id) // ajuste conforme sua estrutura
-
-                    docRef.update("agendado_para", novaData)
-                }) {
+                    onReagendarClick(agenda)}){
                     Icon(
                         imageVector = Icons.Default.Check,
                         contentDescription = "Reagendar para o mês seguinte",
