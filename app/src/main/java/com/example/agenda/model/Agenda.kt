@@ -1,7 +1,6 @@
-package com.example.contas.model
+package com.example.agenda.model
 
 import com.google.firebase.Timestamp
-import java.math.BigDecimal
 
 data class Agenda( // Define the primary constructor here
 

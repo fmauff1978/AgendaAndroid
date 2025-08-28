@@ -8,7 +8,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.example.contas" />
+                  <option name="appId" value="com.example.agenda" />
                   <option name="mobileSdkAppId" value="1:549391682813:android:b69f751c55b15cf5470294" />
                   <option name="projectId" value="contas-27a8b" />
                   <option name="projectNumber" value="549391682813" />

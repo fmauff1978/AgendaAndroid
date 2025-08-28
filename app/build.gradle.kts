@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.contas"
+    namespace = "com.example.agenda"
     compileSdk = 36
 
     buildFeatures {
@@ -16,7 +16,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.contas"
+        applicationId = "com.example.agenda"
         minSdk = 28
         targetSdk = 36
         versionCode = 1

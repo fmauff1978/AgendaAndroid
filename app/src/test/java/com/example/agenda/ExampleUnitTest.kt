@@ -1,4 +1,4 @@
-package com.example.contas
+package com.example.agenda
 
 import org.junit.Test
 
